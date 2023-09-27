@@ -28,6 +28,10 @@
         {#if form?.username}
             <span style="color: red;">{form.username}</span>
         {/if}
+            
+        {#if form?.password}
+            <span style="color: red;">{form.password}</span>
+        {/if}
     </div>
 </form>
 

@@ -20,20 +20,18 @@ export const actions: Actions = {
             });
             if (existingUser) {
                 // Handle already logged in
-                return fail(400, { username: "User already logged in" });
-                if (password) {
-                    
+                if (password==existingUser?.password) {
+                    cookies.set("username", username);                
+                    throw redirect(307, "/");
                 } else {
-                    throw fail(400, {password: "you need a password!!!"})
+                    return fail(400, {password: "you need a password!!!"})
                 }
             } else {
                 // Create a new user in the database
                 await prisma.user.create({
                     data: { name: username, password: password},
                 });
-                cookies.set("username", username);
-                cookies.set("password", password);
-                
+                cookies.set("username", username);                
                 throw redirect(307, "/");
             }
         }
@@ -47,8 +45,5 @@ export const actions: Actions = {
         }
         cookies.delete("username");
         // Delete the user from the database
-        await prisma.user.delete({
-            where: { name: username },
-        });
     },
 };
